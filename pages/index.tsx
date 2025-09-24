@@ -1,7 +1,7 @@
 export default function Home() {
   return (
-    <div>
-      <h1>Welcome to Shoppers</h1>
-    </div>
+     <main className="bg-[#FFFFFF] min-h-screen">
+
+     </main>
   );
 }
