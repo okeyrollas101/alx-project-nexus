@@ -1,6 +1,6 @@
-import Facebook from "@/public/assets/facebook-02.png";
-import Instagram from "@/public/assets/instagram.png";
-import Twitter from "@/public/assets/new-twitter.png";
+import Facebook from "@/public/assets/images/facebook-02.png";
+import Instagram from "@/public/assets/images/instagram.png";
+import Twitter from "@/public/assets/images/new-twitter.png";
 import Image from "next/image";
 import SubscribeButton from "../common/button/SubscribeButton";
 import { useState } from "react";
@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
 			, 2000); // Clear message after 2s
 	};
 	return (
-		<footer className="bg-[#191C1F] text-[#77878F] px-6 py-12 md:px-16 max-h-[393px] overflow-y-auto">
+		<footer className="bg-[#191C1F] text-[#77878F] px-10 py-12 md:px-16 max-h-[393px] overflow-y-auto">
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
 				{/* Brand Info */}
 				<section>
@@ -76,7 +76,7 @@ const Footer: React.FC = () => {
 					<h3 className="text-xl font-semibold mb-4 text-white">Stay Updated</h3>
 					<p>Subscribe to our newsletter for the latest products and offers.</p>
 					<form className="flex flex-col space-y-3" onSubmit={handleSubscribe}>
-						<input onChange={(e) => setSubscribe({ email: e.target.value })} value={subscribe.email} name="email" type="emal" placeholder="Enter your email address" className="text-gray-800 p-2 bg-white border-2 focus:*:border-gray-200 border-gray-200 rounded-lg" />
+						<input onChange={(e) => setSubscribe({ email: e.target.value })} value={subscribe.email} name="email" type="email" placeholder="Enter your email address" className="text-gray-800 p-2 bg-white border-2 focus:*:border-gray-200 border-gray-200 rounded-lg" />
 						<SubscribeButton label="Subscribe Now" />
 						<p className="py-1 text-[#F59D55] font-semibold">{subscribeMessage}</p>
 					</form>
