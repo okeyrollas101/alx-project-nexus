@@ -28,6 +28,9 @@ const ProductCategoryCard: React.FC<ICategoryProps> = ({
         alt={name}
         width={350}
         height={280}
+        onError={(e) => {
+              e.currentTarget.src = "/fallback.png";
+            }}
         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
       />
 
@@ -49,7 +52,7 @@ const ProductCategoryCard: React.FC<ICategoryProps> = ({
         <button
           onClick={handleExplore}
           role="button"
-          className="self-end flex items-center gap-2 bg-[#F59D55]  text-gray-200  p-2 rounded-full hover:bg-[#A95F21] transition"
+          className="self-end flex items-center gap-2 bg-green-600  text-gray-200  p-2 rounded-full hover:bg-green-800 transition"
           aria-label={`Explore ${name}`}
           title="Explore Category"
         >
