@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!userId) return res.status(400).json({ message: "User ID required" });
 
     const orders = await Order.find({ user: userId });
-    const totalSpent = orders.reduce((sum, o) => sum + o.totalAmount, 0);
+    const totalSpent = orders.reduce((sum, o) => sum + o.total, 0);
 
     return res.status(200).json({
       totalOrders: orders.length,

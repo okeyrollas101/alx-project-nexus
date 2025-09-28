@@ -2,7 +2,6 @@ import React from "react";
 import ProductCategoryCard from "@/components/product/ProductCategoryCard";
 import { ICategoryProps } from "@/types";
 import { GetServerSideProps } from "next";
-import { IProduct } from "@/models/Product";
 
 interface Props {
   productCategory: ICategoryProps[];
@@ -31,14 +30,12 @@ export default ProductCategoryPage;
 
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const productRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`);
-  const products: IProduct[] = await productRes.json();
 
   const categoryRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/categories`);
   const productCategory : ICategoryProps[] = await categoryRes.json();
 
 
   return {
-    props: { products, productCategory },
+    props: { productCategory },
   };
 };

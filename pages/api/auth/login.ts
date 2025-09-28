@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dbConnect from "@/utils/mongodb";
 import User from "@/models/User";
+import { setTokenCookie } from "@/utils/setCookie";
 
 export default async function handler(
   req: NextApiRequest,
@@ -38,11 +39,13 @@ export default async function handler(
     );
 
     //  Secure Cookie options
-    res.setHeader("Set-Cookie", [
-      `token=${token}; HttpOnly; Path=/; Max-Age=3600; SameSite=Strict; Secure=${
-        process.env.NODE_ENV === "production" ? "true" : "false"
-      }`,
-    ]);
+    // res.setHeader("Set-Cookie", [
+    //   `token=${token}; HttpOnly; Path=/; Max-Age=3600; SameSite=Strict; Secure=${
+    //     process.env.NODE_ENV === "production" ? "true" : "false"
+    //   }`,
+    // ]);
+
+    setTokenCookie(res, token);
 
     return res.status(200).json({
       message: "Login successful",

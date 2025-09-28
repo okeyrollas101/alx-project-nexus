@@ -1,7 +1,7 @@
+// pages/product/[id].tsx
 import ButtonWithOutIcon from "@/components/common/button/ButtonWithOutIcon";
 import StarRating from "@/components/common/StarRating";
 import { IProduct } from "@/models/Product";
-import { ICategoryProps } from "@/types";
 import {
   ChevronLeft,
   Heart,
@@ -21,13 +21,24 @@ import ProductTabs from "@/components/product/ProductTabs";
 import RelatedProduct from "@/components/product/RelatedProduct";
 import { useRouter } from "next/router";
 import AddToCartButton from "@/components/common/button/AddToCartButton";
+import { ProductCardprops } from "@/interfaces";
+
+interface productDetailProps extends ProductCardprops {
+  gallery?: string[];
+  stock?: number;
+  description: string;
+  relatedProducts?: IProduct[];
+}
 
 interface ProductDetailPageProps {
   product: IProduct | null;
-  productCategory: ICategoryProps[];
+  productDetail: productDetailProps;
 }
 
-const ProductDetailPage = ({ product }: ProductDetailPageProps) => {
+const ProductDetailPage = ({
+  product,
+  productDetail,
+}: ProductDetailPageProps) => {
   const Router = useRouter();
 
   if (!product) {
@@ -40,6 +51,7 @@ const ProductDetailPage = ({ product }: ProductDetailPageProps) => {
 
   return (
     <article className="py-6 px-4 lg:px-28">
+      {/* Breadcrumb Header */}
       <header>
         <div className="flex items-center flex-wrap space-y-2 space-x-4 py-4 mb-12">
           <HomeIcon color="green" />
@@ -61,7 +73,7 @@ const ProductDetailPage = ({ product }: ProductDetailPageProps) => {
             </p>
           </Link>
           <span>/</span>
-          <p className="text-base font-medium  text-blue-500  hover:text-blue-500 hover:underline transition-underline duration-300">
+          <p className="text-base font-medium text-blue-500 hover:underline transition-underline duration-300">
             {product.name}
           </p>
         </div>
@@ -74,7 +86,9 @@ const ProductDetailPage = ({ product }: ProductDetailPageProps) => {
         </button>
       </header>
 
+      {/* Product Main Section */}
       <section className="py-6 block lg:flex">
+        {/* Images */}
         <article className="w-full lg:w-1/2 mr-0 lg:mr-6">
           <figure>
             <Image
@@ -85,19 +99,25 @@ const ProductDetailPage = ({ product }: ProductDetailPageProps) => {
               className="rounded-2xl object-contain hover:scale-105 transition-scale duration-500 ease-in-out"
             />
           </figure>
+
+          {/* Gallery */}
           <section className="grid grid-cols-3 gap-4 py-6">
-            {product.gallery?.map((photo, index) => (
-              <Image
-                key={index}
-                src={photo}
-                alt={`${product.name}`}
-                height={400}
-                width={400}
-                className="rounded-2xl h-48 hover:scale-105 transition-scale duration-500 ease-in-out"
-              />
-            ))}
+            {Array(3)
+              .fill(product.image) // repeat the same image three times
+              .map((photo, index) => (
+                <Image
+                  key={index}
+                  src={photo}
+                  alt={`${product.name} ${index + 1}`}
+                  height={400}
+                  width={400}
+                  className="rounded-2xl h-48 hover:scale-105 transition-scale duration-500 ease-in-out"
+                />
+              ))}
           </section>
         </article>
+
+        {/* Product Details */}
         <article className="w-full lg:w-1/2 ml-0 lg:ml-6">
           <header className="flex justify-between items-center mb-10">
             <button className="bg-[#F59D55] hover:bg-[#A95F21] text-gray-100 hover:text-gray-50 transition duration-700 py-1 px-2 rounded-xl">
@@ -114,6 +134,8 @@ const ProductDetailPage = ({ product }: ProductDetailPageProps) => {
               />
             </div>
           </header>
+
+          {/* Product Info */}
           <section>
             <h1 className="text-[35px] font-bold">{product.name}</h1>
             <div aria-label="review ratings" className="my-4">
@@ -132,7 +154,6 @@ const ProductDetailPage = ({ product }: ProductDetailPageProps) => {
                   <span className="text-lg line-through font-medium text-gray-500">
                     ${product.price}
                   </span>
-
                   <span className="text-xl font-bold text-gray-900">
                     $
                     {(
@@ -152,13 +173,14 @@ const ProductDetailPage = ({ product }: ProductDetailPageProps) => {
                 </span>
               )}
             </div>
+
             <div>
-              <h1 className="text-[25px] text-[#F59D55] py-4 font-medium">
-                In Stock
+              <h1 className="text-[25px] text-[#A95F21] py-4 font-medium">
+                In Stock: {productDetail.stock || "N/A"}
               </h1>
               <hr className="pb-6 text-gray-300" />
               <p className="text-[18px] font-light pb-6">
-                Electric height-adjustable standing desk with memory presets.
+                {productDetail.description}
               </p>
               <hr className=" text-gray-300" />
             </div>
@@ -167,7 +189,7 @@ const ProductDetailPage = ({ product }: ProductDetailPageProps) => {
 
             <div className="flex space-x-5">
               <AddToCartButton
-                id={product.id}
+                id={product._id}
                 name={product.name}
                 description={product.description}
                 price={product.price}
@@ -178,10 +200,11 @@ const ProductDetailPage = ({ product }: ProductDetailPageProps) => {
               <ButtonWithOutIcon label="Buy Now" />
             </div>
 
+            {/* Stats */}
             <section className="grid grid-cols-2 md:grid-cols-3 gap-6 my-12">
               <Stats
                 Icon={Shield}
-                stats="Free Shiping"
+                stats="Free Shipping"
                 content="On orders over $50"
               />
               <Stats Icon={Truck} stats="Warranty" content="1 year coverage" />
@@ -191,19 +214,20 @@ const ProductDetailPage = ({ product }: ProductDetailPageProps) => {
         </article>
       </section>
 
+      {/* Product Tabs */}
       <section>
         <ProductTabs
-          description="Electric height-adjustable standing desk with memory presets. This premium product is designed with attention to detail and quality craftsmanship. Perfect for both everyday use and special occasions, it combines functionality with style to meet your needs."
+          description={productDetail.description}
           specifications="Height: 28-48 inches, Weight Capacity: 150 kg, Material: Steel + MDF, Color: Black, White, Walnut"
           reviews={
             <div>
               <p>No reviews yet.</p>
-              {/* Later you can map review components here */}
             </div>
           }
         />
 
-        <RelatedProduct products={product.relatedProducts || []} />
+        {/* Related Products */}
+        <RelatedProduct products={productDetail.relatedProducts || []} />
       </section>
     </article>
   );
@@ -214,19 +238,20 @@ export default ProductDetailPage;
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params as { id: string };
 
-  console.log("Fetching product with ID:", id);
-
-  const productRes = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${id}`
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products/product/${id}`
   );
 
-  if (!productRes.ok) {
+  if (!res.ok) {
     return { notFound: true };
   }
 
-  const product = await productRes.json();
+  const data = await res.json();
 
   return {
-    props: { product }, // pass to page as prop
+    props: {
+      product: data.product || null,
+      productDetail: data.productDetail || null,
+    },
   };
 };

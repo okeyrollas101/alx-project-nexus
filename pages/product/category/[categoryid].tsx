@@ -10,18 +10,12 @@ interface CategoryProductPageProps {
   initialCategoryName: string;
 }
 
-interface CategoryApiResponse {
-  categoryName: string;
-  categoryId: string;
-  products: IProduct[];
-}
-
 const CategoryProductPage: React.FC<CategoryProductPageProps> = ({
   initialProducts,
   initialCategoryName,
 }) => {
   const router = useRouter();
-  const { id } = router.query;
+  const { categoryId } = router.query;
 
   const [products, setProducts] = useState<IProduct[]>(initialProducts);
   const [categoryName, setCategoryName] = useState(initialCategoryName);
@@ -29,18 +23,18 @@ const CategoryProductPage: React.FC<CategoryProductPageProps> = ({
 
   // ✅ Refetch products if categoryId changes (client-side navigation)
   useEffect(() => {
-    if (!id) return;
+    if (!categoryId) return;
 
     setLoading(true);
-    fetch(`/api/categories/${id}`)
-      .then((res) => res.json() as Promise<CategoryApiResponse>)
+    fetch(`/api/products?category=${categoryId}`)
+      .then((res) => res.json() as Promise<IProduct[]>)
       .then((data) => {
-        setProducts(data.products);
-        setCategoryName(data.categoryName);
+        setProducts(data);
+        setCategoryName(categoryId as string);
       })
       .catch((err) => console.error("Error fetching category products:", err))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [categoryId]);
 
   return (
     <article className="min-h-screen px-6 py-10 bg-white">
@@ -58,7 +52,9 @@ const CategoryProductPage: React.FC<CategoryProductPageProps> = ({
       ) : (
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.length > 0 ? (
-            products.map((product) => <ProductCard key={product.id} {...product} />)
+            products.map((product) => (
+              <ProductCard key={product._id} {...product} />
+            ))
           ) : (
             <p className="col-span-full text-center text-gray-500">
               No products found in this category.
@@ -73,18 +69,18 @@ const CategoryProductPage: React.FC<CategoryProductPageProps> = ({
 export default CategoryProductPage;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.query;
+  const { categoryId } = context.params as { categoryId: string };
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/categories/${id}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/products?category=${categoryId}`
     );
-    const data = await res.json();
+    const data: IProduct[] = await res.json();
 
     return {
       props: {
-        initialProducts: data.products || [],
-        initialCategoryName: data.categoryName || "",
+        initialProducts: data || [],
+        initialCategoryName: categoryId,
       },
     };
   } catch (error) {

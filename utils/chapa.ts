@@ -4,10 +4,9 @@ import axios from "axios";
 const CHAPA_SECRET_KEY = process.env.CHAPA_SECRET_KEY;
 const CHAPA_BASE_URL = "https://api.chapa.co/v1";
 
-// Initiate payment
 export async function initiatePayment({
   amount,
-  currency = "RWF",
+  currency = "USD",
   email,
   firstName,
   lastName,
@@ -21,14 +20,17 @@ export async function initiatePayment({
   callbackUrl: string;
 }) {
   try {
+    const txRef = `tx-${Date.now()}`; // unique reference
+
     const response = await axios.post(
       `${CHAPA_BASE_URL}/transaction/initialize`,
       {
-        amount,
+        amount: amount.toString(), // Chapa expects string
         currency,
         email,
         first_name: firstName,
         last_name: lastName,
+        tx_ref: txRef,
         callback_url: callbackUrl,
       },
       {
@@ -41,10 +43,15 @@ export async function initiatePayment({
 
     return response.data;
   } catch (error) {
-    console.error("Chapa initiatePayment error:", error);
+    if (axios.isAxiosError(error)) {
+      console.error("Chapa initiatePayment error:", error.response?.data || error.message);
+    } else {
+      console.error("Chapa initiatePayment error:", (error as Error).message || error);
+    }
     throw error;
   }
 }
+
 
 // Verify payment
 export async function verifyPayment(reference: string) {

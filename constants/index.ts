@@ -10,9 +10,9 @@ export interface navLinkProps{
 
 export const navLinks : navLinkProps[] = [
   { name: "Home", path: "/dashboard", icon: Home },
-  { name: "Users", path: "/dashboard/users", icon: User },
-  { name: "Products", path: "/dashboard/products", icon: Truck },
-  { name: "Orders", path: "/dashboard/orders", icon: ShoppingCart },
+  { name: "Users", path: "/dashboard/user", icon: User },
+  { name: "Products", path: "/dashboard/product", icon: Truck },
+  { name: "Orders", path: "/dashboard/order", icon: ShoppingCart },
   { name: "Logout", path: "/", icon: LogOut },
 ];
 

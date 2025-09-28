@@ -3,10 +3,11 @@ export interface discountProps{
 }
 
 export interface ProductCard extends discountProps {
+  _id:string;
   id: string;
   image: string;
   name: string;
-  description: string;
+  description:string;
   price: string;
   rating?: string; 
   reviewsCount?: number; 
@@ -14,10 +15,7 @@ export interface ProductCard extends discountProps {
   categoryId: string;
 }
 
-export interface ProductCardprops{
-    id: string
-    products: ProductCard[]
-}
+export type ProductCardprops = ProductCard;
 
 export interface ProductDetail extends ProductCard {
   description: string;
@@ -28,12 +26,13 @@ export interface ProductDetail extends ProductCard {
 
 export interface ProductCategoryProps{
     id: string;
-    name: string;
-    image: string;
-    description: string;
+    name:string;
+    image:string;
+    description:string;
 }
 
  export interface CartItem {
+  _id: string;
   id: string;            
   name: string;          
   description: string;   

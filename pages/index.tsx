@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import SubscribeForm from "@/components/common/SubscribeForm";
 import Hero from "@/components/home/Hero";
 import Product from "@/components/home/Product";
@@ -8,9 +7,7 @@ import ProductCategory from "@/components/home/ProductCategory";
 import { IProduct } from "@/models/Product";
 import { ICategoryProps } from "@/types";
 import { GetServerSideProps } from "next";
-import Modal from "@/components/common/Modal";
-import LoginForm from "@/components/common/LoginForm";
-import RegisterForm from "@/components/common/RegisterForm";
+
 
 interface HomeProps {
   products: IProduct[];

@@ -1,6 +1,5 @@
 // pages/product.tsx
 import React from "react";
-import { GetServerSideProps } from "next";
 import ProductCard from "@/components/product/ProductCard";
 import ButtonWithOutIcon from "@/components/common/button/ButtonWithOutIcon";
 import { useRouter } from "next/router";

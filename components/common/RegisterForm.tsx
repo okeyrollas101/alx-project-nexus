@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "@/redux/slices/userSlice";
 import { AppDispatch, RootState } from "@/redux/store";
