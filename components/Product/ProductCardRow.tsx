@@ -49,9 +49,6 @@ const ProductCard: React.FC<ProductCard> = ({
             width={280}
             height={280}
             priority
-            onError={(e) => {
-              e.currentTarget.src = "/fallback.png";
-            }}
             className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110"
           />
 

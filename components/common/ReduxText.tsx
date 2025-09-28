@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchProductsByCategory } from "@/redux/slices/productSlice";
-import ProductCard from "@/component/product/ProductCard";
+import ProductCard from "@/components/product/ProductCard";
 
 const CategoryProductPage = ({ categoryId }: { categoryId: string }) => {
   const dispatch = useAppDispatch();

@@ -33,9 +33,9 @@ function Hero() {
         </header>
 
         <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 my-12">
-          <Stats Icon={Star} stats="4.9/5 Stars" content="12,847 Reviews" />
-          <Stats Icon={Shield} stats="4.9/5 Stars" content="12,847 Reviews" />
-          <Stats Icon={Users} stats="4.9/5 Stars" content="12,847 Reviews" />
+          <Stats Icon={Star} stats="4.9/5 Stars" content="11,847 Reviews" />
+          <Stats Icon={Shield} stats="4.9/5 Stars" content="15,847 Reviews" />
+          <Stats Icon={Users} stats="4.9/5 Stars" content="10,847 Reviews" />
           <Stats Icon={Truck} stats="4.9/5 Stars" content="12,847 Reviews" />
         </section>
 

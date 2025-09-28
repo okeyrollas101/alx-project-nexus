@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { updateQuantity, removeFromCart } from "@/redux/slices/cartSlice";
 import { CartItem } from "@/interfaces";
 import Image from "next/image";
+import { Trash2 } from "lucide-react";
 
 interface Props {
   items: CartItem[];
@@ -72,7 +73,7 @@ const CartList: React.FC<Props> = ({ items }) => {
               onClick={() => dispatch(removeFromCart(item.id))}
               className="text-red-600 hover:text-red-800"
             >
-              🗑️
+              <Trash2 />
             </button>
             <p className="font-semibold">
               ${(item.price * item.quantity).toFixed(2)}

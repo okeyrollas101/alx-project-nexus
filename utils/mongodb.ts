@@ -6,10 +6,7 @@ const MONGO_URI = process.env.MONGO_URI!;
 if (!MONGO_URI) {
   throw new Error("Please define the MONGO_URI environment variable");
 }
-
-// Global is used to maintain a cached connection across hot reloads in development
 declare global {
-  // eslint-disable-next-line no-var
   var mongoose: { conn: Mongoose | null; promise: Promise<Mongoose> | null };
 }
 

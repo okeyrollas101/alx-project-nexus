@@ -4,6 +4,7 @@ import Twitter from "@/public/assets/images/new-twitter.png";
 import Image from "next/image";
 import SubscribeButton from "../common/button/SubscribeButton";
 import { useState } from "react";
+import Link from "next/link";
 
 const Footer: React.FC = () => {
 	const [subscribeMessage, setSubscribeMessage] = useState("");
@@ -64,11 +65,11 @@ const Footer: React.FC = () => {
 				<section>
 					<h3 className="font-semibold text-white mb-4">QUICK LINKS</h3>
 					<ul className="space-y-2">
-						<li><a href="/" className="hover:text-white hover:translate-x-1.5 transition duration-500 ease-in-out">Home</a></li>
-						<li><a href="/catalog" className="hover:text-white hover:translate-x-1.5 transition duration-500 ease-in-out">Catalog</a></li>
-						<li><a href="/categories" className="hover:text-white hover:translate-x-1.5 transition duration-500 ease-in-out">Category</a></li>
-						<li><a href="/about" className="hover:text-white hover:translate-x-1.5 transition duration-500 ease-in-out">About Us</a></li>
-						<li><a href="#" className="text-[#A95F21] font-medium hover:text-white flex items-center gap-1">Browse All Product →</a></li>
+						<li><Link href="/" className="hover:text-white hover:translate-x-1.5 transition duration-500 ease-in-out">Home</Link></li>
+						<li><Link href="/catalog" className="hover:text-white hover:translate-x-1.5 transition duration-500 ease-in-out">Catalog</Link></li>
+						<li><Link href="/categories" className="hover:text-white hover:translate-x-1.5 transition duration-500 ease-in-out">Category</Link></li>
+						<li><Link href="/about" className="hover:text-white hover:translate-x-1.5 transition duration-500 ease-in-out">About Us</Link></li>
+						<li><Link href="#" className="text-[#A95F21] font-medium hover:text-white flex items-center gap-1">Browse All Product →</Link></li>
 					</ul>
 				</section>
 				{/* Customer Support */}

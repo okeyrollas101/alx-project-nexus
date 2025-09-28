@@ -17,11 +17,10 @@ const AboutPage = () => {
     >
       <header className="text-center space-y-1 mb-12 px-4 lg:w-5xl w-md mx-auto">
         <h1 className="lg:text-[60px] text-[35px] font-bold">
-          Curating Excellence Since 2025
+          Exuding Excellence Since 2025
         </h1>
         <p className="text-xl px-6 max-w-4xl mx-auto text-gray-600">
-          We're passionate about bringing you the finest products from around
-          the world, carefully selected for quality, style, and value.
+          Bringing you exceptional products from around the world, handpicked with care for quality, design, and affordability.
         </p>
       </header>
       <article className="lg:px-4 px-0 mx-auto space-y-6">
@@ -54,15 +53,12 @@ const AboutPage = () => {
           <article className="space-y-6 mx-auto text-start">
             <h2 className="text-[35px] font-bold">Our Story</h2>
             <p className="text-[18px]">
-              Founded in 2025, ShopCatalog began as a simple idea: to create a
-              shopping experience that puts quality and customer satisfaction
-              first. What started as a small team with big dreams has grown into
-              a trusted destination for thousands of customers worldwide.
+              Established in 2025, Shoppers started with one goal — to deliver quality and customer-first experiences. 
+              From humble beginnings, we’ve grown into a trusted marketplace serving thousands around the globe.
             </p>
             <p className="text-[18px]">
-              We believe that shopping should be more than just a transaction.
-              It should be an experience that delights, inspires, and connects
-              people with products they truly love.
+              For us, shopping isn’t just a transaction. It’s an experience that sparks joy, 
+              inspires discovery, and brings you closer to the products you cherish.
             </p>
             <ButtonWithOutIcon
               label="Explore Our Products"
@@ -71,7 +67,7 @@ const AboutPage = () => {
           </article>
           <figure className="relative">
             <Image
-              src="/assets/images/about-image-modern-office-team.png"
+              src="/assets/images/pexels-office.jpg"
               alt="About Us Image"
               width={1200}
               height={600}
@@ -124,26 +120,26 @@ const AboutPage = () => {
           </article>
           <h3 className="text-center text-[30px]">Meet Our Team</h3>
           <p className="text-center text-[18px] max-w-2xl mt-4">
-            The passionate people behind ShopCatalog who work tirelessly to
+            The passionate people behind Shoppers who work tirelessly to
             bring you the best shopping experience.
           </p>
           <article className="mt-12 grid md:grid-cols-3 grid-cols-1  gap-8">
             <TeamCard
               Icon={Users}
               role="Founder & CEO"
-              name="Caleb Habyarimana"
+              name="Obileke Okechukwu"
               content="Passionate about creating exceptional shopping experiences."
             />
             <TeamCard
               Icon={Users}
               role="Head of Product"
-              name="Michael Chen"
+              name="Eberechi Eze"
               content="Ensures every product meets our quality standards."
             />
             <TeamCard
               Icon={Users}
               role="Customer Success"
-              name="Emily Rodriguez"
+              name="Chinonso Nwafor"
               content="Dedicated to making every customer interaction perfect."
             />
           </article>

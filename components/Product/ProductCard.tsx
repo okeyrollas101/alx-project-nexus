@@ -39,21 +39,21 @@ const ProductCard: React.FC<ProductCard> = ({
   }
 
   return (
-    <Link href={`/product/${id}`}>
-      <div className="bg-white rounded-[14px] shadow-md overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+    <div className="bg-white rounded-[14px] shadow-md overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl">
         {/* Image Section */}
         <div className="relative group">
+        <Link href={`/product/${id}`}>
           <Image
             src={image}
             alt={name}
             width={400}
             height={300}
             priority
-            onError={(e) => {
-              e.currentTarget.src = "/fallback.png";
-            }}
             className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110"
+            aria-label="referencing product detail page"
+            key={`product-${id}`}
           />
+            </Link>
 
           {/* Discount Badge */}
           {hasDiscount && (
@@ -68,17 +68,17 @@ const ProductCard: React.FC<ProductCard> = ({
             className="absolute top-3 right-3 translate-y-3 group-hover:translate-y-0 transition-transform duration-300 ease-out bg-white p-2 rounded-full shadow-md opacity-0 hover:opacity-100"
           >
             {isFavorite ? (
-              <Heart className="text-green-600 fill-green-600 transition-colors duration-300" />
+              <Heart className="text-[#A95F21] fill-[#A95F21] transition-colors duration-300" />
             ) : (
-              <Heart className="text-gray-700 hover:text-green-600 transition-colors duration-300" />
+              <Heart className="text-gray-700 hover:text-[#A95F21] transition-colors duration-300" />
             )}
           </button>
         </div>
-
+       
         {/* Content Section */}
         <div className="p-5 bg-gray-50">
           {/* Product Name */}
-          <h3 className="text-xl font-semibold text-gray-800 hover:text-green-700 mb-1">
+          <h3 className="text-xl font-semibold text-gray-800 hover:text-[#A95F21] mb-1">
             {name.length > 30 ? `${name.slice(0, 30)}...` : name}
           </h3>
 
@@ -131,7 +131,6 @@ const ProductCard: React.FC<ProductCard> = ({
           </div>
         </div>
       </div>
-    </Link>
   );
 };
 
