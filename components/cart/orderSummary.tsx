@@ -176,8 +176,8 @@ const OrderSummary: React.FC<Props> = ({ subtotal, shipping, tax, total }) => {
         <button
           onClick={handleCheckout}
           disabled={isLoading}
-          className={`bg-[#F59D55] text-white py-3 rounded ${
-            isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-[#A95F21]"
+          className={`bg-green-600 text-white py-3 rounded ${
+            isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"
           }`}
         >
           {isLoading ? "Processing..." : "Proceed to Checkout"}
@@ -185,7 +185,7 @@ const OrderSummary: React.FC<Props> = ({ subtotal, shipping, tax, total }) => {
 
         <Link
           href="/catalog"
-          className="block text-center mt-2 py-3 border border-gray-300 rounded hover:bg-[#A95F21] hover:text-white transition duration-700 ease-in-out"
+          className="block text-center mt-2 py-3 border border-gray-300 rounded hover:bg-green-800 hover:text-white transition duration-700 ease-in-out"
         >
           Continue Shopping
         </Link>

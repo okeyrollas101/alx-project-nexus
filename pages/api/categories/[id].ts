@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/utils/mongodb";
-import Category from "@/models/Category";
+import Category, { ICategory } from "@/models/Category";
 import upload from "@/middleware/upload";
 import cloudinary from "@/utils/cloudinary";
 
@@ -10,23 +10,39 @@ export const config = {
     bodyParser: false,
   },
 };
+
+// Extend NextApiRequest to include Multer file
+interface MulterNextApiRequest extends NextApiRequest {
+  file?: Express.Multer.File;
+}
+
+// Explicit handler type
+type MethodHandler = (req: MulterNextApiRequest, res: NextApiResponse) => void | Promise<void>;
+
 // Utility to run upload middleware
-const runWithUpload = (req: NextApiRequest, res: NextApiResponse, methodHandler: Function) => {
+const runWithUpload = (
+  req: MulterNextApiRequest,
+  res: NextApiResponse,
+  methodHandler: MethodHandler
+) => {
   const multerMiddleware = upload.single("image");
-  multerMiddleware(req as any, res as any, (err: any) => {
-    if (err) return res.status(500).json({ message: "Upload error", error: err });
-    methodHandler();
+
+  multerMiddleware(req as any, res as any, (err: unknown) => {
+    if (err) {
+      return res.status(500).json({ message: "Upload error", error: String(err) });
+    }
+    methodHandler(req, res);
   });
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: MulterNextApiRequest, res: NextApiResponse) {
   await dbConnect();
   const { id } = req.query;
 
   try {
     switch (req.method) {
       case "PUT":
-        return runWithUpload(req, res, async () => {
+        return runWithUpload(req, res, async (req, res) => {
           if (!id) {
             return res.status(400).json({ message: "Category ID is required" });
           }
@@ -35,13 +51,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           if (!category) {
             return res.status(404).json({ message: "Category not found" });
           }
-          const updateData: any = { ...req.body };
 
-          if ((req as any).file) {
-            const uploadResult = await cloudinary.uploader.upload(
-              (req as any).file.path,
-              { folder: "alx-project-assets/categories" }
-            );
+          const updateData: Partial<ICategory> = { ...req.body };
+
+          if (req.file) {
+            const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+              folder: "alx-project-assets/categories",
+            });
             updateData.image = uploadResult.secure_url;
           }
 
@@ -69,8 +85,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       default:
         return res.status(405).json({ message: "Method Not Allowed" });
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Category API error:", error);
-    return res.status(500).json({ message: "Server Error", error });
+    return res.status(500).json({ message: "Server Error", error: (error as Error).message });
   }
 }

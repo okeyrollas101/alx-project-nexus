@@ -15,7 +15,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action: PayloadAction<CartItem>) => {
-      console.log("🛒 Adding to cart:", action.payload);
+      console.log("Adding to cart:", action.payload);
 
       const existingItem = state.items.find(
         (item) => item._id === action.payload._id
@@ -23,14 +23,13 @@ const cartSlice = createSlice({
 
       if (existingItem) {
         existingItem.quantity += action.payload.quantity;
-        console.log("🔄 Updated existing item quantity:", existingItem);
+        console.log("Updated existing item quantity:", existingItem);
       } else {
         state.items.push({
           ...action.payload,
           _id: action.payload._id || action.payload.id, // ensure MongoDB _id is stored
-          id: action.payload.id || action.payload._id, // keep compatibility for UI
+          id: action.payload.id || action.payload._id || "", // keep compatibility for UI
         });
-        console.log("➕ Added new item:", action.payload);
       }
     },
 
@@ -46,12 +45,12 @@ const cartSlice = createSlice({
       const item = state.items.find((i) => i._id === action.payload.id);
       if (item) {
         item.quantity = action.payload.quantity;
-        console.log("✏️ Updated quantity:", item);
+        console.log("Updated quantity:", item);
       }
     },
 
     clearCart: (state) => {
-      console.log("🧹 Clearing cart");
+      console.log("Clearing cart");
       state.items = [];
     },
   },

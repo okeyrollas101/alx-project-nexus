@@ -7,6 +7,18 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { updateProduct } from "@/redux/slices/productSlice";
 import { IProduct } from "@/models/Product";
 
+interface createproductProps {
+  name: string;
+  description: string;
+  price: string;
+  categoryId: string;
+  rating: string;
+  reviewsCount: string | number;
+  discount: string;
+  hasDiscount: boolean;
+  image: File | null;
+}
+
 export default function EditProduct() {
   const router = useRouter();
   const params = useParams();
@@ -16,7 +28,9 @@ export default function EditProduct() {
   const products = useSelector((state: RootState) => state.products.products);
 
   const [product, setProduct] = useState<IProduct | null>(null);
-  const [formData, setFormData] = useState<any>({
+  const [loading, setLoading] = useState(true);
+
+  const [formData, setFormData] = useState<createproductProps>({
     name: "",
     description: "",
     price: "",
@@ -29,22 +43,50 @@ export default function EditProduct() {
   });
 
   useEffect(() => {
-    const existingProduct = products.find(
-      (p) => p.id === productId || p._id === productId
-    );
-    if (existingProduct) {
-      setProduct(existingProduct as IProduct);
-      setFormData({
-        name: existingProduct.name || "",
-        description: existingProduct.description || "",
-        price: existingProduct.price || "",
-        categoryId: existingProduct.categoryId || "",
-        rating: existingProduct.rating || "",
-        reviewsCount: existingProduct.reviewsCount || "",
-        discount: existingProduct.discount || "",
-        hasDiscount: existingProduct.hasDiscount || false,
-        image: null,
-      });
+    if (!products || products.length === 0) {
+      // Data missing: fetch products from API
+      fetch("/api/products") // Change to your API endpoint
+        .then((res) => res.json())
+        .then((data) => {
+          const existingProduct = data.find(
+            (p: IProduct) => p.id === productId || p._id === productId
+          );
+          if (existingProduct) {
+            setProduct(existingProduct);
+            setFormData({
+              name: existingProduct.name || "",
+              description: existingProduct.description || "",
+              price: existingProduct.price || "",
+              categoryId: existingProduct.categoryId || "",
+              rating: existingProduct.rating || "",
+              reviewsCount: existingProduct.reviewsCount || "",
+              discount: existingProduct.discount || "",
+              hasDiscount: existingProduct.hasDiscount || false,
+              image: null,
+            });
+          }
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
+    } else {
+      const existingProduct = products.find(
+        (p) => p.id === productId || p._id === productId
+      );
+      if (existingProduct) {
+        setProduct(existingProduct as IProduct);
+        setFormData({
+          name: existingProduct.name || "",
+          description: existingProduct.description || "",
+          price: existingProduct.price || "",
+          categoryId: existingProduct.categoryId || "",
+          rating: existingProduct.rating || "",
+          reviewsCount: existingProduct.reviewsCount || "",
+          discount: existingProduct.discount || "",
+          hasDiscount: existingProduct.hasDiscount || false,
+          image: null,
+        });
+      }
+      setLoading(false);
     }
   }, [productId, products]);
 
@@ -53,7 +95,7 @@ export default function EditProduct() {
   ) => {
     if (e.target.name === "image") {
       const input = e.target as HTMLInputElement;
-      setFormData({ ...formData, image: input.files?.[0] });
+      setFormData({ ...formData, image: input.files?.[0] ?? null });
     } else if (e.target.name === "hasDiscount") {
       setFormData({
         ...formData,
@@ -67,8 +109,10 @@ export default function EditProduct() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!product) return;
+
     const data = new FormData();
-    Object.keys(formData).forEach((key) => {
+    (Object.keys(formData) as (keyof createproductProps)[]).forEach((key) => {
       const value = formData[key];
       if (value !== undefined && value !== null) {
         data.append(key, value instanceof File ? value : String(value));
@@ -77,14 +121,15 @@ export default function EditProduct() {
     data.append("id", String(productId));
 
     try {
-      await dispatch(updateProduct({ id: productId, formData }));
+      await dispatch(updateProduct({ _id: productId, formData: data }));
       router.push("/dashboard/product");
     } catch (error) {
       console.error("Update product error:", error);
     }
   };
 
-  if (!product) return <p className="p-6 text-center">Loading product...</p>;
+  if (loading) return <p className="p-6 text-center">Loading product...</p>;
+  if (!product) return <p className="p-6 text-center">Product not found</p>;
 
   return (
     <section className="p-6 max-w-4xl mx-auto bg-white shadow-lg rounded-lg">
@@ -156,7 +201,7 @@ export default function EditProduct() {
           </div>
         </div>
 
-        {/* Rating, Reviews, Discount, Stock */}
+        {/* Rating, Reviews, Discount */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block mb-1 font-medium text-gray-700">
@@ -238,3 +283,5 @@ export default function EditProduct() {
     </section>
   );
 }
+
+export const getServerSideProps = async () => ({ props: {} });

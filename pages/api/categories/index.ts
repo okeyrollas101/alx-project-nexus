@@ -11,16 +11,31 @@ export const config = {
   },
 };
 
+// Extend NextApiRequest to include Multer file
+interface MulterNextApiRequest extends NextApiRequest {
+  file?: Express.Multer.File;
+}
+
+// Explicit handler type
+type MethodHandler = (req: MulterNextApiRequest, res: NextApiResponse) => void | Promise<void>;
+
 // Utility to run upload middleware
-const runWithUpload = (req: NextApiRequest, res: NextApiResponse, methodHandler: Function) => {
+const runWithUpload = (
+  req: MulterNextApiRequest,
+  res: NextApiResponse,
+  methodHandler: MethodHandler
+) => {
   const multerMiddleware = upload.single("image");
-  multerMiddleware(req as any, res as any, (err: any) => {
-    if (err) return res.status(500).json({ message: "Upload error", error: err });
-    methodHandler();
+
+  multerMiddleware(req as any, res as any, (err: unknown) => {
+    if (err) {
+      return res.status(500).json({ message: "Upload error", error: String(err) });
+    }
+    methodHandler(req, res);
   });
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: MulterNextApiRequest, res: NextApiResponse) {
   await dbConnect();
   const { id } = req.query;
 
@@ -40,8 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             image: category.image,
           });
         } else {
-          const categories = await Category.find().lean(); 
-
+          const categories = await Category.find().lean();
           return res.status(200).json(
             categories.map((cat) => ({
               id: cat._id.toString(),
@@ -54,17 +68,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
       case "POST":
-        return runWithUpload(req, res, async () => {
+        return runWithUpload(req, res, async (req, res) => {
           const { name, description } = req.body;
-          if (!name || !(req as any).file) {
+          if (!name || !req.file) {
             return res.status(400).json({ message: "Name and image are required" });
           }
 
           // Upload to Cloudinary
-          const uploadResult = await cloudinary.uploader.upload(
-            (req as any).file.path,
-            { folder: "alx-project-assets/categories" }
-          );
+          const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+            folder: "alx-project-assets/categories",
+          });
 
           const newCategory = await Category.create({
             name,
@@ -74,11 +87,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
           return res.status(201).json(newCategory);
         });
+
       default:
         return res.status(405).json({ message: "Method Not Allowed" });
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Category API error:", error);
-    return res.status(500).json({ message: "Server Error", error });
+    return res.status(500).json({ message: "Server Error", error: (error as Error).message });
   }
 }

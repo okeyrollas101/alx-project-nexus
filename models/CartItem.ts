@@ -1,8 +1,8 @@
-import { Document, Schema, model, Model } from "mongoose";
+import { Document, Schema, model, Model, Types } from "mongoose";
 import { IProduct } from "./Product";
 
 export interface ICartItem extends Document {
-  product: IProduct["_id"];
+  product: Types.ObjectId | IProduct;
   quantity: number;
   price: number;
 }

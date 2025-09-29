@@ -28,7 +28,7 @@ const CartPage: React.FC = () => {
             {cartItems.length} items in your cart
           </span>
         </section>
-        <button className="flex items-center space-x-4 px-4 py-2 border border-gray-300 hover:text-gray-50 text-gray-600 rounded-lg hover:bg-green-700">
+        <button className="flex items-center space-x-4 px-4 py-2 border border-gray-300 hover:text-gray-50 text-gray-600 rounded-lg hover:bg-[#A95F21]">
           <ArrowLeft className="inline mr-2" />
           <Link href={"/catalog"}>Continue Shopping</Link>
         </button>

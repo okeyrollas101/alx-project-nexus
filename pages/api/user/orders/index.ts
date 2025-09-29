@@ -1,8 +1,13 @@
-// /api/user/orders.ts
+// /api/user/orders/index.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/utils/mongodb";
 import Order from "@/models/Order";
 import { verifyToken } from "@/utils/VerifyToken";
+
+interface DecodedToken {
+  userId: string;
+  role?: string;
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,9 +24,10 @@ export default async function handler(
       }
 
       const token = authHeader.split(" ")[1];
-      const decoded: any = verifyToken(token);
-      if (!decoded?.userId)
+      const decoded = verifyToken(token) as DecodedToken;
+      if (!decoded?.userId) {
         return res.status(401).json({ message: "Invalid token" });
+      }
 
       // ✅ Extract order details from request body
       const { items, subtotal, shipping, tax, total, paymentMethod } = req.body;
@@ -48,10 +54,13 @@ export default async function handler(
 
       await order.save();
 
-      return res.status(201).json({message:"New order create",order});
-    } catch (err) {
-      console.error("Order creation error:", err);
-      return res.status(500).json({ message: "Failed to create order", error: err });
+      return res.status(201).json({ message: "New order created", order });
+    } catch (error: unknown) {
+      console.error("Order creation error:", error);
+      if (error instanceof Error) {
+        return res.status(500).json({ message: "Failed to create order", error: error.message });
+      }
+      return res.status(500).json({ message: "Failed to create order", error: "Unknown error" });
     }
   }
 
@@ -63,18 +72,22 @@ export default async function handler(
       }
 
       const token = authHeader.split(" ")[1];
-      const decoded: any = verifyToken(token);
-      if (!decoded?.userId)
+      const decoded = verifyToken(token) as DecodedToken;
+      if (!decoded?.userId) {
         return res.status(401).json({ message: "Invalid token" });
+      }
 
       // ✅ Fetch all orders for this user
       const orders = await Order.find({ user: decoded.userId }).populate("items.product");
 
-      return res.status(200).json({message:"success",orders});
-    } catch (err) {
-      return res.status(500).json({ message: "Server error", error: err });
+      return res.status(200).json({ message: "success", orders });
+    } catch (error: unknown) {
+      console.error("Order fetch error:", error);
+      if (error instanceof Error) {
+        return res.status(500).json({ message: "Server error", error: error.message });
+      }
+      return res.status(500).json({ message: "Server error", error: "Unknown error" });
     }
   }
-
-  return res.status(405).json({ message: "Method not allowed" });
+  return res.status(405).json({ message: "Method Not Allowed" });
 }

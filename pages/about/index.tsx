@@ -20,7 +20,8 @@ const AboutPage = () => {
           Exuding Excellence Since 2025
         </h1>
         <p className="text-xl px-6 max-w-4xl mx-auto text-gray-600">
-          Bringing you exceptional products from around the world, handpicked with care for quality, design, and affordability.
+          We&apos;re passionate about bringing you the finest products from around
+          the world, carefully selected for quality, style, and value.
         </p>
       </header>
       <article className="lg:px-4 px-0 mx-auto space-y-6">
@@ -29,12 +30,12 @@ const AboutPage = () => {
           aria-label="statistics section"
         >
           <Stat
-            stats="50K+"
+            stats="100K+"
             content="Happy Customers"
             className="bg-gray-100 rounded-2xl py-4 hover:bg-gray-200 hover:shadow-md transition duration-500 ease-linear"
           />
           <Stat
-            stats="10K+"
+            stats="20K+"
             content="Products"
             className="bg-gray-100 rounded-2xl py-4 hover:bg-gray-200 hover:shadow-md transition duration-500 ease-linear"
           />
@@ -53,12 +54,15 @@ const AboutPage = () => {
           <article className="space-y-6 mx-auto text-start">
             <h2 className="text-[35px] font-bold">Our Story</h2>
             <p className="text-[18px]">
-              Established in 2025, Shoppers started with one goal — to deliver quality and customer-first experiences. 
-              From humble beginnings, we’ve grown into a trusted marketplace serving thousands around the globe.
+              Founded in 2025, Shoppers began as a simple idea: to create a
+              shopping experience that puts quality and customer satisfaction
+              first. What started as a small team with big dreams has grown into
+              a trusted destination for thousands of customers worldwide.
             </p>
             <p className="text-[18px]">
-              For us, shopping isn’t just a transaction. It’s an experience that sparks joy, 
-              inspires discovery, and brings you closer to the products you cherish.
+              We believe that shopping should be more than just a transaction.
+              It should be an experience that delights, inspires, and connects
+              people with products they truly love.
             </p>
             <ButtonWithOutIcon
               label="Explore Our Products"
@@ -67,7 +71,7 @@ const AboutPage = () => {
           </article>
           <figure className="relative">
             <Image
-              src="/assets/images/pexels-office.jpg"
+              src="/assets/images/about-image-modern-office-team.png"
               alt="About Us Image"
               width={1200}
               height={600}
@@ -127,19 +131,19 @@ const AboutPage = () => {
             <TeamCard
               Icon={Users}
               role="Founder & CEO"
-              name="Obileke Okechukwu"
+              name="Okechukwu Obileke"
               content="Passionate about creating exceptional shopping experiences."
             />
             <TeamCard
               Icon={Users}
               role="Head of Product"
-              name="Eberechi Eze"
+              name="Vivian Ekpe"
               content="Ensures every product meets our quality standards."
             />
             <TeamCard
               Icon={Users}
               role="Customer Success"
-              name="Chinonso Nwafor"
+              name="Ghidigram"
               content="Dedicated to making every customer interaction perfect."
             />
           </article>
@@ -150,7 +154,7 @@ const AboutPage = () => {
             Ready to Start Shopping?
           </h1>
           <p className="text-[18px] max-w-3xl mt-2">
-            Join thousands of satisfied customers who trust ShopCatalog for
+            Join thousands of satisfied customers who trust Shoppers for
             their shopping needs.
           </p>
           <div className=" block space-y-4 lg:flex lg:space-x-12  mt-8">

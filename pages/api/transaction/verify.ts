@@ -49,16 +49,27 @@ export default async function handler(
 
       return res.redirect(`/order/failed?orderId=${orderId}`);
     }
-  } catch (error: any) {
-    console.error(
-      "[VERIFY] Payment verification failed:",
-      error.response?.data || error.message
-    );
-    return res
-      .status(500)
-      .json({
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("[VERIFY] Payment verification failed:", error.message);
+      return res.status(500).json({
         message: "Payment verification failed",
-        error: error.response?.data || error.message,
+        error: error.message,
       });
+    }
+
+    if (typeof error === "object" && error !== null && "response" in error) {
+      const err = error as { response?: { data?: unknown } };
+      console.error("[VERIFY] Payment verification failed:", err.response?.data);
+      return res.status(500).json({
+        message: "Payment verification failed",
+        error: err.response?.data,
+      });
+    }
+
+    return res.status(500).json({
+      message: "Payment verification failed",
+      error: "Unknown error",
+    });
   }
 }

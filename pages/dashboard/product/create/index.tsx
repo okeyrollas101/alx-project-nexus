@@ -2,15 +2,25 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
-import { createProduct } from "@/redux/slices/productSlice";
+import { IProduct } from "@/models/Product";
+
+interface createproductProps{
+      name: string;
+      description: string;
+      price: string;
+      categoryId: string;
+      rating: string;
+      reviewsCount: string;
+      discount: string;
+      hasDiscount: boolean;
+      image: File | null;
+}
 
 export default function CreateProduct() {
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
 
-  const [formData, setFormData] = useState<any>({
+  const [formData, setFormData] = useState<createproductProps>({
     name: "",
     description: "",
     price: "",
@@ -22,12 +32,28 @@ export default function CreateProduct() {
     image: null,
   });
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const data = new FormData();
+
+  const res = await fetch('/api/products', {
+    method: 'POST',
+    body: data,
+  });
+  if (!res.ok) throw new Error("Failed to create product");
+  const result = (await res.json()) as IProduct & { _id: string };
+  console.log("Created product:", result);
+  router.push("/dashboard/product");
+
+  }
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     if (e.target.name === "image") {
       if (e.target instanceof HTMLInputElement) {
-        setFormData({ ...formData, image: e.target.files?.[0] });
+        setFormData({ ...formData, image: e.target.files?.[0] ?? null });
       }
     } else if (e.target.name === "hasDiscount") {
       if (e.target instanceof HTMLInputElement) {
@@ -35,33 +61,6 @@ export default function CreateProduct() {
       }
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const data = new FormData();
-    Object.keys(formData).forEach((key) => {
-      const value = formData[key];
-      if (value !== undefined && value !== null) {
-        if (value instanceof File) {
-          data.append(key, value);
-        } else {
-          data.append(key, String(value));
-        }
-      }
-    });
-
-    try {
-      const result = await dispatch(createProduct(data)).unwrap();
-
-      // ✅ Simulate storing MongoDB _id so it can be used later
-      console.log("Created product with MongoDB ID:", result._id);
-
-      router.push("/dashboard/product");
-    } catch (error) {
-      console.error("Create product error:", error);
     }
   };
 

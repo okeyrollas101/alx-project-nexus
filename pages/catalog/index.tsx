@@ -206,7 +206,6 @@ const CatalogPage: React.FC<Props> = ({ allProducts, categories }) => {
                   className="cursor-pointer hover:bg-[#A95F21] hover:text-gray-200 rounded-sm p-1 mr-2"
                   size={24}
                   aria-label="grid view"
-                  aria-colindex={1}
                   role="button"
                   onClick={() => setIsGrigView(true)}
                 />
@@ -214,7 +213,7 @@ const CatalogPage: React.FC<Props> = ({ allProducts, categories }) => {
                   className="cursor-pointer hover:bg-[#A95F21] hover:text-gray-200 rounded-sm p-1"
                   size={24}
                   aria-label="list view"
-                   aria-colindex={2}
+
                    role="button"
                    onClick={() => setIsGrigView(false)}
                 />

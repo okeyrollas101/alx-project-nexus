@@ -1,8 +1,14 @@
+// pages/api/user/[id].ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/utils/mongodb";
 import User from "@/models/User";
 import Order from "@/models/Order";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
+
+interface DecodedToken extends JwtPayload {
+  userId: string;
+  role: string;
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect();
@@ -19,10 +25,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const token = authHeader.split(" ")[1];
     const secret = process.env.JWT_SECRET || "supersecret";
 
-    let decoded: any;
+    let decoded: DecodedToken;
     try {
-      decoded = jwt.verify(token, secret);
-    } catch (err) {
+      decoded = jwt.verify(token, secret) as DecodedToken;
+    } catch {
       return res.status(401).json({ message: "Unauthorized — invalid token" });
     }
 
@@ -77,8 +83,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     return res.status(405).json({ message: "Method Not Allowed" });
-  } catch (error) {
-    console.error("User API error:", error);
-    return res.status(500).json({ message: "Server Error", error });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("User API error:", error.message);
+      return res.status(500).json({ message: "Server Error", error: error.message });
+    }
+    console.error("User API unknown error:", error);
+    return res.status(500).json({ message: "Server Error", error: "Unknown error" });
   }
 }

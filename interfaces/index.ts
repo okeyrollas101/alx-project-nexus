@@ -32,7 +32,7 @@ export interface ProductCategoryProps{
 }
 
  export interface CartItem {
-  _id: string;
+  _id?: string;
   id: string;            
   name: string;          
   description: string;   
@@ -41,4 +41,24 @@ export interface ProductCategoryProps{
   image?: string;        
   categoryId?: string;  
   rating?: number;       
+}
+
+export interface Order {
+  id: string;                     
+  userId: string;                 
+  products: OrderProduct[];       
+  totalAmount: number;            
+  status: "pending" | "paid" | "failed" | "cancelled"; 
+  paymentMethod: "card" | "paypal" | "crypto" | string; 
+  transactionRef?: string;        
+  createdAt: string;              
+  updatedAt?: string;             
+}
+
+export interface OrderProduct {
+  productId: string;             
+  name: string;                   
+  price: number;                  
+  quantity: number;              
+  image?: string;                 
 }

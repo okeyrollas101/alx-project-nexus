@@ -48,7 +48,7 @@ export default function Home({ products, productCategory }: HomeProps) {
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const productRes = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/products`
+      `${process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL || "http://localhost:3000"}/api/products`
     );
 
     if (!productRes.ok) {
